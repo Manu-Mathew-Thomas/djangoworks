@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container w-75 mx-auto p-5 mt-5 fs-5 border border-3 border-secondary text-center">
+<h2>View books</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>Cover</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Price</th>
+        <th>Pages</th>
+        <th>Language</th>
+        <th>Actions</th>
+    </tr>
+    {% for i in books %}
+    <tr>
+        <td><img src="{{i.image.url}}" height="100px" width="100px"></td>
+        <td>{{i.title}}</td>
+        <td>{{i.author}}</td>
+        <td>{{i.price}}</td>
+        <td>{{i.pages}}</td>
+        <td>{{i.language}}</td>
+        <td class="pt-3"><a href="{% url 'books:bookdetails' i.id %}" class="btn btn-danger">View</a>
+            <a href="{% url 'books:editbook' i.id %}" class="btn btn-danger">Edit</a>
+            <a href="{% url 'books:deletebook' i.id %}" class="btn btn-danger">Delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+<!--    <ol>-->
+<!--        {% for i in books %}-->
+<!--        <li>Book Details</li>-->
+<!--        <ul>-->
+<!--            <li>Title: {{i.title}}</li>-->
+<!--            <li>Author: {{i.author}}</li>-->
+<!--            <li>Price: {{i.price}}</li>-->
+<!--            <li>Pages: {{i.pages}}</li>-->
+<!--            <li>Language: {{i.language}}</li>-->
+<!--        </ul>-->
+<!--        {% endfor %}-->
+<!--    </ol>-->
+</div>
+{% endblock %}

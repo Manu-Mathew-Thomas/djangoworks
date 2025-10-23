@@ -1,0 +1,85 @@
+from django.shortcuts import render,redirect
+from books.forms import BookForm
+from books.models import Book
+
+#Function based view
+
+# def home(request):
+#     return render(request,'home.html')
+
+#Class based view
+
+from django.views import View
+class Home(View):
+    def get(self,request):
+        return render(request,'home.html')
+
+# def addbooks(request):
+#     if(request.method=="POST"):
+#         form_instance=BookForm(request.POST,request.FILES)
+#         if(form_instance.is_valid()):
+#             form_instance.save()
+#
+#             return redirect('books:viewbooks')
+#
+#     if(request.method=="GET"):
+#         form_instance=BookForm()
+#         context={'form':form_instance}
+#         return render(request,'addbooks.html',context)
+
+class Addbooks(View):
+    def post(self,request):
+        print(request.POST)
+        print(request.FILES)
+        form_instance=BookForm(request.POST,request.FILES)
+        if(form_instance.is_valid()):
+            form_instance.save()
+            return redirect('books:viewbooks')
+
+    def get(self,request):
+        form_instance=BookForm()
+        context={'form':form_instance}
+        return render(request,'addbooks.html',context)
+
+from django.db.models import Q
+class SearchView(View):
+    def get(self,request):
+        query=request.GET['q']
+        # print(query)
+        if query:
+            b=Book.objects.filter(Q(author__icontains=query)|Q(title__icontains=query)|Q(language__icontains=query))
+            #Q object -- syntax used to add logical or/logical and in ORM queries
+            #field lookups --> fieldname__lookup eg:age__gt>30 age__lt=30/title__contains="abc"/title__icontains="abc"
+            context={'book':b}
+            return render(request,'search.html',context)
+
+def viewbooks(request):
+    b=Book.objects.all()
+    context={'books':b}
+    return render(request,'viewbooks.html',context)
+
+def bookdetails(request,i):
+    if(request.method=="GET"):
+        b=Book.objects.get(id=i)
+        context={'book':b}
+        return render(request,'bookdetails.html',context)
+
+def editbook(request,i):
+
+    if(request.method=="POST"):
+        b=Book.objects.get(id=i)
+        form_instance=BookForm(request.POST,request.FILES,instance=b)
+        if(form_instance.is_valid()):
+            form_instance.save()
+            return redirect('books:viewbooks')
+
+    if(request.method=="GET"):
+        b=Book.objects.get(id=i)
+        form_instance=BookForm(instance=b)
+        context={'form':form_instance}
+        return render(request,'editbook.html',context)
+
+def deletebook(request,i):
+    b=Book.objects.get(id=i)
+    b.delete()
+    return redirect('books:viewbooks')

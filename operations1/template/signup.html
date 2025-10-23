@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container w-50 p-5 mt-5 bg-light text-center shadow">
+    <h3>Sign Up</h3>
+
+  {% if success %}
+        <h3 style="color:green;">Signup Successful! ✅</h3>
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+<!--    {{form}}-->
+<!--        <div class="mt-3">-->
+<!--            <input type="submit" value="Signup">-->
+<!--        </div>-->
+ <p>
+                    <label for="username">Username:</label>
+                    {{ form.username }}
+                </p>
+                <p>
+                    <label for="password">Password:</label>
+                    {{ form.password }}
+                </p>
+                <p>
+                    <label for="place">Place:</label>
+                    {{ form.place }}
+                </p>
+                <p>
+                    <label for="gender">Gender:</label>
+                    {{ form.gender }}
+                </p>
+                <p>
+                    <label for="role">Role:</label>
+                    {{ form.role }}
+                </p>
+                <p>
+                    <label for="email">Email:</label>
+                    {{ form.email }}
+                </p>
+                <button type="submit">Signup</button>
+
+ </form>
+    {% endif %}
+
+</div>
+{% endblock %}
